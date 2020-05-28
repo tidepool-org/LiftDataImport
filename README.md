@@ -1,2 +1,2 @@
 # LiftDataImport
-Send Data to LiftBridge Streams
+Send Data to LiftBridge Streams.
