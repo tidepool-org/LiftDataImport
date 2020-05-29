@@ -1,4 +1,4 @@
-module github.com/tidepool-org/LiftDataImport
+module github.com/tidepool-org/lift-data-import
 
 go 1.13
 

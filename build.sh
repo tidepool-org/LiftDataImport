@@ -2,4 +2,4 @@
 
 rm -rf dist
 mkdir dist
-go build -o dist/liftDataImport liftDataImport.go
+go build -o dist/lift-data-import lift-data-import.go
