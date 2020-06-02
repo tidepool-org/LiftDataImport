@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/tidepool-org/lift-data-import/api"
+	"github.com/tidepool-org/kafka-data-import/api"
 )
 
 func main() {

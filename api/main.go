@@ -10,7 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	lift "github.com/liftbridge-io/go-liftbridge"
+	"gopkg.in/confluentinc/confluent-kafka-go.v1/kafka"
 )
 
 var (
@@ -24,40 +24,15 @@ var (
 
 )
 
-type StreamContext struct {
-	echo.Context
-	Client lift.Client
-}
 
 func MainLoop() {
 	// Echo instance
 	e := echo.New()
 	e.Logger.Print("Starting Main Loop")
 
-	// Create Liftbridge client.
-	addrs := []string{"localhost:9292", "localhost:9293", "localhost:9294"}
-	client, err := lift.Connect(addrs)
-	if err != nil {
-		panic(err)
-	}
-	defer client.Close()
-
-	// Create a stream attached to the NATS subject "foo".
-	if err := client.CreateStream(context.Background(), StreamSubject, StreamName); err != nil {
-		if err != lift.ErrStreamExists {
-			panic(err)
-		}
-	}
-
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			cc := &StreamContext{c, client}
-			return next(cc)
-		}
-	})
 
 	// Routes
 	// jellyfish
@@ -96,13 +71,38 @@ func MainLoop() {
 // Handler
 // jellyfish
 func jellyfishPostData(c echo.Context) error {
-	//groupId := c.QueryParam("groupid")
-	cc := c.(*StreamContext)
-	// Publish a message to "foo".
-	if _, err := cc.Client.Publish(context.Background(), StreamName, []byte("hello")); err != nil {
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost"})
+	if err != nil {
 		panic(err)
 	}
 
+	defer p.Close()
+
+	// Delivery report handler for produced messages
+	go func() {
+		for e := range p.Events() {
+			switch ev := e.(type) {
+			case *kafka.Message:
+				if ev.TopicPartition.Error != nil {
+					fmt.Printf("Delivery failed: %v\n", ev.TopicPartition)
+				} else {
+					fmt.Printf("Delivered message to %v\n", ev.TopicPartition)
+				}
+			}
+		}
+	}()
+
+	// Produce messages to topic (asynchronously)
+	topic := "myTopic"
+	for _, word := range []string{"Welcome", "to", "Kafka", "Data", "Import"} {
+		p.Produce(&kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+			Value:          []byte(word),
+		}, nil)
+	}
+
+	// Wait for message deliveries before shutting down
+	p.Flush(15 * 1000)
 	return c.String(http.StatusOK, "Hello, World!")
 }
 
