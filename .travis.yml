@@ -2,9 +2,6 @@ sudo: false
 
 env:
   - GO111MODULE=on
-  global:
-    - PATH="$PATH:$GOPATH/bin"
-
 
 language: go
 
