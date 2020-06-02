@@ -1,5 +1,3 @@
-# github.com/confluentinc/confluent-kafka-go v1.4.2
-github.com/confluentinc/confluent-kafka-go/kafka/librdkafka
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 github.com/dgrijalva/jwt-go
 # github.com/labstack/echo/v4 v4.1.16
@@ -14,6 +12,9 @@ github.com/labstack/gommon/random
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.12
 github.com/mattn/go-isatty
+# github.com/segmentio/kafka-go v0.3.6
+github.com/segmentio/kafka-go
+github.com/segmentio/kafka-go/sasl
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
 # github.com/valyala/fasttemplate v1.1.0
@@ -35,5 +36,3 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# gopkg.in/confluentinc/confluent-kafka-go.v1 v1.4.2
-gopkg.in/confluentinc/confluent-kafka-go.v1/kafka

@@ -1,10 +1,6 @@
 # Development
 FROM golang:1.14-alpine AS builder
 WORKDIR /go/src/github.com/tidepool-org/kafka-data-import
-RUN set -ex &&\
-    apk add --no-progress --no-cache \
-      gcc \
-      musl-dev
 
 RUN adduser -D tidepool && \
     chown -R tidepool /go/src/github.com/tidepool-org/kafka-data-import
