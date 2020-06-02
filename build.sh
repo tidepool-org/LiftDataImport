@@ -2,4 +2,4 @@
 
 rm -rf dist
 mkdir dist
-go build -o dist/kafka-data-import kafka-data-import.go -a -v -tags musl
+go build -a -v -tags musl -o dist/kafka-data-import kafka-data-import.go
