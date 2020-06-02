@@ -1,7 +1,7 @@
 # Development
-FROM golang:1.13.10-alpine AS development
+FROM golang:1.14-alpine AS builder
 WORKDIR /go/src/github.com/tidepool-org/kafka-data-import
-RUN apk add librdkafka-dev build-base
+RUN apk add gcc musl-dev
 RUN adduser -D tidepool && \
     chown -R tidepool /go/src/github.com/tidepool-org/kafka-data-import
 USER tidepool
