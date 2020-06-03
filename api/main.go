@@ -76,7 +76,12 @@ func jellyfishPostData(c echo.Context) error {
 	partition := 0
 	host := "kafka-kafka-bootstrap"
 
-	conn, _ := kafka.DialLeader(context.Background(), "tcp", host, topic, partition)
+	conn, err := kafka.DialLeader(context.Background(), "tcp", host, topic, partition)
+	if err != nil {
+
+		fmt.Printf("Error making connection: %s", err.Error())
+		return c.String(http.StatusOK, err.Error())
+	}
 
 	conn.SetWriteDeadline(time.Now().Add(10*time.Second))
 	conn.WriteMessages(
