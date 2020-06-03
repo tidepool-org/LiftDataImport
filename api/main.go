@@ -35,6 +35,7 @@ func MainLoop() {
 
 	// Routes
 	// jellyfish
+	e.POST("/kafka/data/:groupid", jellyfishPostData)
 	e.POST("/data/:groupid", jellyfishPostData)
 	e.POST("/v1/device/upload/cl", jellyfishPostCarelinkData)
 
