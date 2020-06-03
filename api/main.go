@@ -76,7 +76,7 @@ func jellyfishPostData(c echo.Context) error {
 	partition := 0
 	host := "kafka-kafka-bootstrap"
 	port := 9092
-	hostStr := fmt.Sprint("%s:%d", host,port)
+	hostStr := fmt.Sprintf("%s:%d", host,port)
 
 	conn, err := kafka.DialLeader(context.Background(), "tcp", hostStr, topic, partition)
 	if err != nil {
