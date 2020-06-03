@@ -74,7 +74,7 @@ func jellyfishPostData(c echo.Context) error {
 	// to produce messages
 	topic := "data"
 	partition := 0
-	host := "kafka-kafka-bootstrap"
+	host := "https://kafka-kafka-bootstrap"
 	port := 9092
 	hostStr := fmt.Sprintf("%s:%d", host,port)
 
