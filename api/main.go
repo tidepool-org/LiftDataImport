@@ -21,7 +21,6 @@ var (
 
 	StreamSubject = "foo"
 	StreamName = "foo-stream"
-
 )
 
 
