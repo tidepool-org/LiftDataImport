@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -78,6 +79,18 @@ func jellyfishPostData(c echo.Context) error {
 	port := 9092
 	hostStr := fmt.Sprintf("%s:%d", host,port)
 
+	fmt.Printf("%s", "0")
+	m := echo.Map{}
+	if err := c.Bind(&m); err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	m["Content-Type"] = c.Request().Header["Content-Type"]
+	fmt.Printf("%s", "1")
+	jsonString, _ := json.Marshal(m)
+
+	fmt.Printf("%s\n", jsonString)
+
+
 	conn, err := kafka.DialLeader(context.Background(), "tcp", hostStr, topic, partition)
 	if err != nil {
 
@@ -85,9 +98,10 @@ func jellyfishPostData(c echo.Context) error {
 		return c.String(http.StatusOK, err.Error())
 	}
 
+
 	conn.SetWriteDeadline(time.Now().Add(10*time.Second))
 	conn.WriteMessages(
-		kafka.Message{Value: []byte("Hello jellyfish!")},
+		kafka.Message{Value: []byte(jsonString)},
 	)
 
 	conn.Close()
