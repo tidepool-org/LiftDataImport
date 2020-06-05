@@ -24,6 +24,18 @@ var (
 	StreamName = "foo-stream"
 )
 
+//service.MakeRoute("POST", "/v1/datasets/:dataSetId/data", Authenticate(DataSetsDataCreate)),
+//service.MakeRoute("DELETE", "/v1/datasets/:dataSetId", Authenticate(DataSetsDelete)),
+//service.MakeRoute("PUT", "/v1/datasets/:dataSetId", Authenticate(DataSetsUpdate)),
+//service.MakeRoute("DELETE", "/v1/users/:userId/data", Authenticate(UsersDataDelete)),
+//service.MakeRoute("POST", "/v1/users/:userId/datasets", Authenticate(UsersDataSetsCreate)),
+//
+//service.MakeRoute("POST", "/v1/data_sets/:dataSetId/data", Authenticate(DataSetsDataCreate)),
+//service.MakeRoute("DELETE", "/v1/data_sets/:dataSetId/data", Authenticate(DataSetsDataDelete)),
+//service.MakeRoute("DELETE", "/v1/data_sets/:dataSetId", Authenticate(DataSetsDelete)),
+//service.MakeRoute("PUT", "/v1/data_sets/:dataSetId", Authenticate(DataSetsUpdate)),
+//service.MakeRoute("POST", "/v1/users/:userId/data_sets", Authenticate(UsersDataSetsCreate)),
+
 
 func MainLoop() {
 	// Echo instance
@@ -41,12 +53,29 @@ func MainLoop() {
 	e.POST("/v1/device/upload/cl", jellyfishPostCarelinkData)
 
 	// platform data
-	e.POST("/dataservices/v1/datasets/:dataSetId/data", platformDataSetsDataCreate)
-	e.POST("/dataservices/v1/datasets/:dataSetId", platformDataSetsDelete)
-	e.POST("/dataservices/v1/datasets/:dataSetId", platformDataSetsUpdate)
+	e.POST("/v1/datasets/:dataSetId/data", platformDataSetsDataCreate)
+	e.DELETE("/v1/datasets/:dataSetId", platformDataSetsDelete)
+	e.PUT("/v1/datasets/:dataSetId", platformDataSetsUpdate)
+	e.DELETE("/v1/users/:userId/data", platformDataSetsUpdate)
+	e.POST("/v1/users/:userId/datasets", platformDataSetsUpdate)
 
-	e.POST("/dataservices/v1/users/:userId/data", platformUsersDataDelete)
-	e.POST("/dataservices/v1/users/:userId/datasets", platformUsersDataSetsCreate)
+	e.POST("/v1/data_sets/:dataSetId/data", platformUsersDataDelete)
+	e.DELETE("/v1/data_sets/:dataSetId/data", platformUsersDataSetsCreate)
+	e.DELETE("/v1/data_sets/:dataSetId", platformUsersDataSetsCreate)
+	e.PUT("/v1/users/:userId/datasets", platformUsersDataSetsCreate)
+	e.POST("/v1/users/:userId/data_sets", platformUsersDataSetsCreate)
+
+	e.POST("/dataservices/v1/datasets/:dataSetId/data", platformDataSetsDataCreate)
+	e.DELETE("/dataservices/v1/datasets/:dataSetId", platformDataSetsDelete)
+	e.PUT("/dataservices/v1/datasets/:dataSetId", platformDataSetsUpdate)
+	e.DELETE("/dataservices/v1/users/:userId/data", platformDataSetsUpdate)
+	e.POST("/dataservicesv1/v1/users/:userId/datasets", platformDataSetsUpdate)
+
+	e.POST("/dataservices/v1/data_sets/:dataSetId/data", platformUsersDataDelete)
+	e.DELETE("/dataservices/v1/data_sets/:dataSetId/data", platformUsersDataSetsCreate)
+	e.DELETE("/dataservices/v1/data_sets/:dataSetId", platformUsersDataSetsCreate)
+	e.PUT("/dataservices/v1/users/:userId/datasets", platformUsersDataSetsCreate)
+	e.POST("/dataservices/v1/users/:userId/data_sets", platformUsersDataSetsCreate)
 
 	// Start server
 	e.Logger.Printf("Starting Server at: %s\n", ServerString)
