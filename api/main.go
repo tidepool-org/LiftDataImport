@@ -68,15 +68,20 @@ func postData(c echo.Context) error {
 	hostStr := fmt.Sprintf("%s:%d", host,port)
 
 	req := echo.Map{}
+	data := echo.Map{}
 	body := echo.Map{}
 	if err := c.Bind(&body); err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
-	req["body"] = body
-	req["headers"] = c.Request().Header
-	req["method"] = c.Request().Method
-	req["url"] = c.Request().URL
-	req["host"] = c.Request().Host
+	data["body"] = body
+	data["headers"] = c.Request().Header
+	data["method"] = c.Request().Method
+	data["url"] = c.Request().URL
+	data["host"] = c.Request().Host
+
+	req["data"] = data
+	req["source"] = "api"
+
 	reqString, err := json.Marshal(req)
 	if err != nil {
 		fmt.Printf("Problem converting to json: %s", err.Error())
